@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <p>Redirecting back to ChangeWander…</p>
+
+  <p id="fallback" style="display:none;">
+    If nothing happens, tap below:<br /><br />
+    <a id="manual">Open ChangeWander</a>
+  </p>
+
+  <script>
+    (function () {
+      const params = window.location.search || "";
+      const deepLink = "changewander://wallet" + params;
+
+      const manualLink = document.getElementById("manual");
+      manualLink.href = deepLink;
+
+      let didOpen = false;
+
+      // Attempt deep link via anchor (more reliable)
+      const a = document.createElement("a");
+      a.href = deepLink;
+      document.body.appendChild(a);
+      a.click();
+
+      // If app opens, page will be backgrounded
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          didOpen = true;
+        }
+      });
+
+      // Fallback after delay
+      setTimeout(() => {
+        if (!didOpen) {
+          document.getElementById("fallback").style.display = "block";
+        }
+      }, 2500);
+    })();
+  </script>
+</body>
+</html>
