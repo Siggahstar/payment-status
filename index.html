@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Redirecting…</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -23,11 +22,11 @@
 
   <script>
     (function () {
-      // Preserve Stripe query params
+      // Preserve query params (e.g., ?session_id=...)
       const params = window.location.search || "";
 
-      // IMPORTANT: build deep link explicitly
-        const deepLink = "changewander://?" + params.replace(/^\?/, "");
+      // Deep link now points to Home
+      const deepLink = "changewander://home" + params;
 
       // Set manual fallback link
       const manualLink = document.getElementById("manual");
@@ -35,21 +34,17 @@
 
       let didOpen = false;
 
-      // Use location.href (most reliable on Android)
+      // Open app
       window.location.href = deepLink;
 
-      // Detect backgrounding (app opened)
+      // Detect if app opened
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          didOpen = true;
-        }
+        if (document.hidden) didOpen = true;
       });
 
       // Show fallback if app didn't open
       setTimeout(() => {
-        if (!didOpen) {
-          document.getElementById("fallback").style.display = "block";
-        }
+        if (!didOpen) document.getElementById("fallback").style.display = "block";
       }, 2500);
     })();
   </script>
