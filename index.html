@@ -27,7 +27,7 @@
       const params = window.location.search || "";
 
       // IMPORTANT: build deep link explicitly
-        const deepLink = "changewander://wallet" + params;
+        const deepLink = "changewander://?" + params.replace(/^\?/, "");
 
       // Set manual fallback link
       const manualLink = document.getElementById("manual");
