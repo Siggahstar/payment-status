@@ -23,35 +23,29 @@
 
   <script>
     (function () {
-      // Get query params, ensure it starts with '?'
-      let params = window.location.search || "";
-      if (params && !params.startsWith("?")) {
-        params = "?" + params;
-      }
+      // Preserve Stripe query params
+      const params = window.location.search || "";
 
-      // Build deep link without extra slash
+      // IMPORTANT: build deep link explicitly
       const deepLink = "changewander://wallet" + params;
 
-      // Update manual fallback link
+      // Set manual fallback link
       const manualLink = document.getElementById("manual");
       manualLink.href = deepLink;
 
       let didOpen = false;
 
-      // Attempt deep link via anchor
-      const a = document.createElement("a");
-      a.href = deepLink;
-      document.body.appendChild(a);
-      a.click();
+      // Use location.href (most reliable on Android)
+      window.location.href = deepLink;
 
-      // Detect if app was opened
+      // Detect backgrounding (app opened)
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
           didOpen = true;
         }
       });
 
-      // Fallback after delay
+      // Show fallback if app didn't open
       setTimeout(() => {
         if (!didOpen) {
           document.getElementById("fallback").style.display = "block";
