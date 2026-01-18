@@ -23,21 +23,28 @@
 
   <script>
     (function () {
-      const params = window.location.search || "";
+      // Get query params, ensure it starts with '?'
+      let params = window.location.search || "";
+      if (params && !params.startsWith("?")) {
+        params = "?" + params;
+      }
+
+      // Build deep link without extra slash
       const deepLink = "changewander://wallet" + params;
 
+      // Update manual fallback link
       const manualLink = document.getElementById("manual");
       manualLink.href = deepLink;
 
       let didOpen = false;
 
-      // Attempt deep link via anchor (more reliable)
+      // Attempt deep link via anchor
       const a = document.createElement("a");
       a.href = deepLink;
       document.body.appendChild(a);
       a.click();
 
-      // If app opens, page will be backgrounded
+      // Detect if app was opened
       document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
           didOpen = true;
